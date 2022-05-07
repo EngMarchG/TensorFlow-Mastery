@@ -35,7 +35,7 @@ import numpy as np
 from sklearn.metrics import confusion_matrix
 
 # Our function needs a different name to sklearn's plot_confusion_matrix
-def make_confusion_matrix(y_true, y_pred, classes=None, figsize=(10, 10), text_size=15, norm=False, savefig=False): 
+def make_confusion_matrix(y_true, y_pred, classes=None, figsize=(10, 10), text_size=15, norm=False, savefig=False, rotate=False): 
   """Makes a labelled confusion matrix comparing predictions and ground truth labels.
 
   If classes is passed, confusion matrix will be labelled, if not, integer class values
@@ -88,6 +88,10 @@ def make_confusion_matrix(y_true, y_pred, classes=None, figsize=(10, 10), text_s
   # Make x-axis labels appear on bottom
   ax.xaxis.set_label_position("bottom")
   ax.xaxis.tick_bottom()
+
+  if rotate:
+    plt.xticks(rotation=70, fontsize=text_size)
+    plt.yticks(fontsize=text_size)
 
   # Set the threshold for different colors
   threshold = (cm.max() + cm.min()) / 2.
@@ -286,3 +290,33 @@ def calculate_results(y_true, y_pred):
                   "recall": model_recall,
                   "f1": model_f1}
   return model_results
+
+def custom_imgs(filepath, model, class_names, name_it=False):
+  """
+  Takes in custom images and predicts them in order, while visualizing them as well.
+  It is recommended that the file name is equivalent to that of the picture to avoid guessing.
+  Args:
+      filepath (_type_): The path in which the images are stored in.
+      model (TensorFlow Model): Takes in the model to be used for predicting.
+      class_names (list): Ordered list names according to that of the model.
+      name_it (Bool): Takes the name of the image as the actual label.
+  """
+  custom_food_images = []
+  actual_class = []
+  # File path to find the images
+  for img_path in os.listdir(filepath):
+    custom_food_images.append(filepath + "/" + img_path)
+    actual_class.append(img_path.strip("0123456789"))
+  
+
+  # Make predictions and plot the custom food images
+  for num, img in enumerate(custom_food_images):
+      img = load_and_prep_image(img, scale=False)
+      pred_prob = model.predict(tf.expand_dims(img, axis=0))
+      pred_class = class_names[pred_prob.argmax()]
+      actual_class_string = actual_class[num].split(".")[0]
+      # Plot the appropriate information
+      plt.figure()
+      plt.imshow(img/255)
+      plt.title(f"preds: {pred_class}, actual: {actual_class_string} prob: {pred_prob.max():.2f}")
+      plt.axis(False)
