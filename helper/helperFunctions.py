@@ -320,3 +320,41 @@ def custom_imgs(filepath, model, class_names, name_it=False):
       plt.imshow(img/255)
       plt.title(f"preds: {pred_class}, actual: {actual_class_string} prob: {pred_prob.max():.2f}")
       plt.axis(False)
+
+
+# Make a function for preprocessing images
+def preprocessed_img_categorical(image, label, img_shape=224, scaler=False, class_size=0):
+  """
+  Converts image datatypes to 'float32' and reshapes
+  image to [img_shape, img_shape, colour_channels]
+  scaler (Bool): scales the iamge if necessary (default=False)
+  class_size (int): Transforms sparse labels to categorical ones (default=0)
+
+  Example Usage:
+    test_data_categorical = test_data.map(preprocessed_img, num_parallel_calls=tf.data.AUTOTUNE).batch(32).prefetch(tf.data.AUTOTUNE)
+  """
+  image = tf.image.resize(image, [img_shape, img_shape]) # reshape target image
+  
+  if class_size:
+    label = tf.one_hot(tf.cast(label, tf.int32), class_size)
+  if scaler:
+    image = image/255
+  return tf.cast(image, tf.float32), label # returns (float32_image, label)
+
+
+# Make a function for preprocessing images
+def preprocessed_img_sparse(image, label, img_shape=224, scaler=False, class_size=0):
+  """
+  Converts image datatypes to 'float32' and reshapes
+  image to [img_shape, img_shape, colour_channels]
+  scaler (Bool): scales the iamge if necessary (default=False)
+  class_size (int): Transforms sparse labels to categorical ones (default=0)
+
+  Example Usage:
+    test_data_categorical = test_data.map(preprocessed_img, num_parallel_calls=tf.data.AUTOTUNE).batch(32).prefetch(tf.data.AUTOTUNE)
+  """
+  image = tf.image.resize(image, [img_shape, img_shape]) # reshape target image
+  if scaler:
+    image = image/255
+  return tf.cast(image, tf.float32), label # returns (float32_image, label)
+
