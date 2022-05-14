@@ -45,4 +45,10 @@ This section attempts to tackle a much bigger dataset (10x the previous section)
 - Visualizing each step of the process with different visual techniques
 - Finding the most wrong predictions (model-driven data exploration)
 
-## [7. Transfer Learning Capstone]()
+## [7. Transfer Learning Capstone](https://github.com/EngMarchG/TensorFlow-Mastery/blob/master/7_Transfer_Learning_Capstone/07_Food_Vision_Big_Milestone_Project_.ipynb)
+This section attempts to build a baseline for you to improve on:
+- Building a pre-trained baseline model for the Kaggle 101 Food dataset (70% accuracy)
+- Fine-Tune the built model to beat the baseline (73% accuracy)
+- Try improving the model even further? (Add dropout layers, further augmentation, longer training time, unfreeze more layers)
+- Load and test model made in the notebook for less clutter. How about custom data?
+- Try different architectures e.g EfficientNetv2 (try to avoid the larger models like sticking to B0/lite versions)
