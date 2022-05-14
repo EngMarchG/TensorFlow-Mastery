@@ -291,6 +291,7 @@ def calculate_results(y_true, y_pred):
                   "f1": model_f1}
   return model_results
 
+import string
 def custom_imgs(filepath, model, class_names, name_it=False):
   """
   Takes in custom images and predicts them in order, while visualizing them as well.
@@ -306,7 +307,7 @@ def custom_imgs(filepath, model, class_names, name_it=False):
   # File path to find the images
   for img_path in os.listdir(filepath):
     custom_food_images.append(filepath + "/" + img_path)
-    actual_class.append(img_path.strip("0123456789"))
+    actual_class.append(img_path)
   
 
   # Make predictions and plot the custom food images
@@ -314,7 +315,7 @@ def custom_imgs(filepath, model, class_names, name_it=False):
       img = load_and_prep_image(img, scale=False)
       pred_prob = model.predict(tf.expand_dims(img, axis=0))
       pred_class = class_names[pred_prob.argmax()]
-      actual_class_string = actual_class[num].split(".")[0]
+      actual_class_string = str(actual_class[num].split(".")[0]).strip(string.digits)
       # Plot the appropriate information
       plt.figure()
       plt.imshow(img/255)
