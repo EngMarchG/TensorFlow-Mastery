@@ -35,7 +35,7 @@ import numpy as np
 from sklearn.metrics import confusion_matrix
 
 # Our function needs a different name to sklearn's plot_confusion_matrix
-def make_confusion_matrix(y_true, y_pred, classes=None, figsize=(10, 10), text_size=15, norm=False, savefig=False, rotate=False): 
+def make_confusion_matrix(y_true, y_pred, classes=None, figsize=(10, 10), text_size=15, norm=False, savefig=False, rotate=False, ax=1): 
   """Makes a labelled confusion matrix comparing predictions and ground truth labels.
 
   If classes is passed, confusion matrix will be labelled, if not, integer class values
@@ -49,6 +49,7 @@ def make_confusion_matrix(y_true, y_pred, classes=None, figsize=(10, 10), text_s
     text_size: Size of output figure text (default=15).
     norm: normalize values or not (default=False).
     savefig: save confusion matrix to file (default=False).
+    ax: change to 0 if normalization error is brought up (happens due to dimension shape)
   
   Returns:
     A labelled confusion matrix plot comparing y_true and y_pred.
@@ -62,7 +63,7 @@ def make_confusion_matrix(y_true, y_pred, classes=None, figsize=(10, 10), text_s
   """  
   # Create the confustion matrix
   cm = confusion_matrix(y_true, y_pred)
-  cm_norm = cm.astype("float") / cm.sum(axis=1)[:, np.newaxis] # normalize it
+  cm_norm = cm.astype("float") / cm.sum(axis=ax)[:, np.newaxis] # normalize it
   n_classes = cm.shape[0] # find the number of classes we're dealing with
 
   # Plot the figure and make it pretty
